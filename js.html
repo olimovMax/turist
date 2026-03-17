@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Эко тропа | природный тур</title>
+    <!-- лёгкий шрифт, без лишних засечек, воздух -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #F0FFF0;          /* ОЧЕНЬ СВЕТЛЫЙ МЯТНЫЙ (Honeydew) — фон всего сайта */
+            font-family: 'Inter', sans-serif;
+            color: #1e2b24;                      /* глубокий тёмно-зелёный для читаемости, но не чёрный */
+            line-height: 1.5;
+        }
+
+        /* основной белый цвет — контейнеры, карточки, большие блоки */
+        .white-panel {
+            background-color: #FFFFFF;            /* ОСНОВНОЙ БЕЛЫЙ */
+            border-radius: 32px;
+            box-shadow: 0 10px 30px -10px rgba(120, 100, 70, 0.08); /* тень песочного оттенка */
+            padding: 2rem 2.5rem;
+        }
+
+        .wrapper {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem 2rem;
+        }
+
+        /* типографика */
+        h1, h2, h3 {
+            font-weight: 400;                     /* лёгкий вес, естественно */
+            letter-spacing: -0.02em;
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            line-height: 1.1;
+        }
+
+        h2 {
+            font-size: 2.4rem;
+            margin-bottom: 1.5rem;
+            border-left: 6px solid #FAF0E6;        /* Льняной акцентная линия */
+            padding-left: 1.2rem;
+        }
+
+        h3 {
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+            color: #3a4a3f;                         /* чуть насыщеннее для иерархии */
+        }
+
+        /* АКЦЕНТ (песочный/бежевый) для заголовков в карточках, кнопок, иконок */
+        .accent-sand {
+            color: #b89b7b;                         /* тёплый песок — базовый тон */
+        }
+
+        .card h3 {
+            color: #9c7e5f;                          /* более выраженный песочный для карточек (заголовки) */
+            font-weight: 450;
+        }
+
+        /* кнопки в песочных тонах */
+        .btn-sand {
+            background-color: #FFFAF0;                /* Floral White — тёплый, под дерево/пляж */
+            border: 1px solid #e5d5c0;
+            color: #5f4e3c;
+            padding: 0.7rem 1.8rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn-sand:hover {
+            background-color: #f5e8d8;                /* чуть глубже бежевый */
+            border-color: #ccb99e;
+            color: #2f2a24;
+        }
+
+        /* хедер навигации */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 350;
+            background: #FFFFFF;                       /* белая плашка */
+            padding: 0.3rem 1.2rem;
+            border-radius: 60px;
+            box-shadow: 0 4px 10px rgba(210, 180, 140, 0.1);
+            letter-spacing: -0.02em;
+        }
+
+        .logo span {
+            color: #a28364;                            /* песчинка */
+            font-weight: 450;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            background: #FFFFFF;                        /* белый блок меню */
+            padding: 0.6rem 2rem;
+            border-radius: 40px;
+            box-shadow: 0 4px 12px rgba(160, 130, 90, 0.05);
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #2f4236;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.15s;
+            padding-bottom: 4px;
+        }
+
+        .nav-links a:hover {
+            border-bottom-color: #d9c2aa;               /* песочное подчеркивание */
+        }
+
+        /* hero секция */
+        .hero {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .hero-text {
+            flex: 1 1 300px;
+            align-self: center;
+        }
+
+        .hero-text p {
+            font-size: 1.3rem;
+            margin: 1.5rem 0 2rem;
+            color: #3b4e41;
+        }
+
+        .hero-image {
+            flex: 1 1 300px;
+            background-color: #e6d8c8;                  /* подложка под воображаемое фото — песочный намёк */
+            border-radius: 48px;
+            min-height: 280px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" width="200" height="120" opacity="0.3"><path d="M0,60 Q30,25 65,40 Q90,50 115,35 Q140,20 170,40 Q190,55 200,45 L200,120 L0,120 Z" fill="%23c7b099" /><circle cx="50" cy="45" r="8" fill="%23aecfad" opacity="0.5"/><circle cx="130" cy="60" r="15" fill="%23d9c6aa" opacity="0.5"/></svg>');
+            background-repeat: no-repeat;
+            background-position: bottom right;
+            background-size: cover;
+            background-color: #f2eee7;                   /* очень светлый песчаный */
+            box-shadow: inset 0 0 0 1px rgba(250, 240, 230, 0.6);
+        }
+
+        /* сетка карточек туров */
+        .tour-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0 4rem;
+        }
+
+        .card {
+            background-color: #FFFFFF;                     /* основной белый для карточек */
+            border-radius: 28px;
+            padding: 1.8rem 1.5rem 2rem;
+            box-shadow: 0 15px 30px -12px rgba(150, 130, 100, 0.12);
+            transition: transform 0.2s;
+            border: 1px solid rgba(240, 240, 235, 0.6);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-icon {
+            font-size: 2.6rem;
+            margin-bottom: 1.2rem;
+            background: #FFFAF0;                           /* FLORAL WHITE — песочный фон для иконок */
+            width: 70px;
+            height: 70px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #f0e0ce;
+        }
+
+        .card p {
+            color: #3b4e3f;
+            margin: 0.8rem 0 1.5rem;
+        }
+
+        .price-sand {
+            color: #917b62;
+            font-weight: 500;
+            font-size: 1.3rem;
+        }
+
+        /* feature блок с фоном tea green (ближе к мяте) */
+        .feature-block {
+            background-color: #D0F0C0;                     /* Tea Green — чуть насыщеннее мятный */
+            border-radius: 48px;
+            padding: 3rem 3rem;
+            margin: 4rem 0;
+            color: #23432c;
+        }
+
+        .feature-flex {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .feature-flex > div {
+            flex: 1 1 260px;
+        }
+
+        .feature-flex h3 {
+            font-size: 2rem;
+            border-left: 5px solid #faf0e6;                 /* Linen */
+            padding-left: 1.5rem;
+        }
+
+        /* подвал */
+        .footer {
+            margin-top: 4rem;
+            background: #FFFFFF;                              /* белый низ */
+            border-radius: 36px 36px 0 0;
+            padding: 2.5rem 2.5rem 1.8rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 2rem;
+            color: #48634e;
+            border-top: 2px solid #f0ebe4;
+        }
+
+        .footer small {
+            color: #7b8f7e;
+            width: 100%;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        /* Микро-элементы в песочных тонах */
+        .chip {
+            background: #FAF0E6;            /* Linen */
+            padding: 0.3rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: #5e503f;
+            display: inline-block;
+        }
+
+        hr {
+            border: none;
+            height: 2px;
+            background: linear-gradient(90deg, #f0e4d2, #ffffff, #f0e4d2);
+            margin: 2rem 0;
+        }
+
+        /* адаптация */
+        @media (max-width: 700px) {
+            h1 { font-size: 2.6rem; }
+            .wrapper { padding: 1rem; }
+            .white-panel { padding: 1.5rem; }
+            .navbar { flex-direction: column; align-items: stretch; }
+            .nav-links { justify-content: center; }
+        }
+
+        /* доп. акцент для заголовков внутри белых карточек */
+        .accent-header {
+            color: #b99f82;                                   /* песочный (Floral White производный) */
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- навигация: белое меню на мятном фоне -->
+        <div class="navbar">
+            <div class="logo">⊹ <span>эко</span>то</div>
+            <div class="nav-links">
+                <a href="#">походы</a>
+                <a href="#">леса</a>
+                <a href="#">горы</a>
+                <a href="#">эко</a>
+            </div>
+            <div class="chip">🌿 дыши свободно</div>
+        </div>
+
+        <!-- Hero секция (белый текст на мятном, сама герой плашка белая) -->
+        <div class="hero white-panel">          <!-- белый блок с тенью -->
+            <div class="hero-text">
+                <h1>Туда, где пахнет <span class="accent-sand">сосной</span> и тишиной</h1>
+                <p>Авторские туры в заповедные уголки. Пешие, лесные, высокогорные — только ты и природа.</p>
+                <a href="#" class="btn-sand">↠ выбрать направление</a>
+            </div>
+            <div class="hero-image">
+                <!-- чисто декоративный svg узор (имитация гор/леса) уже в фоне -->
+            </div>
+        </div>
+
+        <!-- карточки туров — основной белый, песочные заголовки, мятный общий фон -->
+        <h2>🌱  ближайшие лесные</h2>
+        <div class="tour-grid">
+            <!-- карточка 1 -->
+            <div class="card">
+                <div class="card-icon">🏔️</div>
+                <h3>Тропа туманов</h3>
+                <p>Горный лагерь, хвойный лес, рассветы над облаками. Ночевка в домиках.</p>
+                <div class="price-sand">44 900 ₽</div>
+                <a href="#" class="btn-sand" style="margin-top: 1.2rem;">подробнее</a>
+            </div>
+            <!-- карточка 2 -->
+            <div class="card">
+                <div class="card-icon">🌲</div>
+                <h3>В сердце бора</h3>
+                <p>Эко-маршрут без следа, знакомство с лесом, ягоды, травы. Идеально для новичков.</p>
+                <div class="price-sand">29 500 ₽</div>
+                <a href="#" class="btn-sand" style="margin-top: 1.2rem;">подробнее</a>
+            </div>
+            <!-- карточка 3 -->
+            <div class="card">
+                <div class="card-icon">🏕️</div>
+                <h3>Песчаный плёс</h3>
+                <p>Сплав + пешие переходы по дюнам. Ночлег у воды в палатках. Песок и сосны.</p>
+                <div class="price-sand">52 800 ₽</div>
+                <a href="#" class="btn-sand" style="margin-top: 1.2rem;">подробнее</a>
+            </div>
+            <!-- карточка 4 -->
+            <div class="card">
+                <div class="card-icon">🍃</div>
+                <h3>Заповедный край</h3>
+                <p>Треккинг к горным озёрам, питание от локальных фермеров, баня.</p>
+                <div class="price-sand">67 200 ₽</div>
+                <a href="#" class="btn-sand" style="margin-top: 1.2rem;">подробнее</a>
+            </div>
+        </div>
+
+        <!-- акцентный блок (Tea Green фон) + белый текст + песочные детали -->
+        <div class="feature-block">
+            <div class="feature-flex">
+                <div>
+                    <h3 style="border-left-color: #FFFAF0; color: #2b4f33;">Экологичные путешествия</h3>
+                    <p style="color: #2b442e;">Мы убираем маршруты, используем биоразлагаемые материалы и поддерживаем местные заповедники.</p>
+                    <div style="margin-top: 2rem;">
+                        <span class="chip" style="background:#FFFAF0; color:#4f543b;">🌎 углеводный след 0</span>
+                        <span class="chip" style="background:#FFFAF0; margin-left:0.5rem;">♻️ забота о лесе</span>
+                    </div>
+                </div>
+                <div style="background-color: #FFFFFF; border-radius: 40px; padding: 1.8rem; box-shadow: 0 6px 18px rgba(150,130,100,0.1);">
+                    <p style="font-size: 1.2rem;"><span style="color: #b2916f;">«</span> Мы влюблены в природу и передаём это бережно <span style="color: #b2916f;">»</span></p>
+                    <p style="margin-top: 0.8rem;">— основатели агентства, <span style="color:#8b765a;">Марина и Сергей</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- дополнительный блок преимуществ (снова белые карточки) -->
+        <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; margin: 3rem 0;">
+            <div class="white-panel" style="flex:1; min-width: 180px;">
+                <div style="font-size: 2.5rem; color:#bb9f82;">🏞️</div>
+                <h4 style="color:#8d735b; margin:0.5rem 0;">100+ маршрутов</h4>
+                <p style="color: #405a45;">По горам, лесам и заповедным тропам.</p>
+            </div>
+            <div class="white-panel" style="flex:1; min-width: 180px;">
+                <div style="font-size: 2.5rem; color:#bb9f82;">⛰️</div>
+                <h4 style="color:#8d735b; margin:0.5rem 0;">Опытные гиды</h4>
+                <p style="color: #405a45;">Профессиональные проводники-экологи.</p>
+            </div>
+            <div class="white-panel" style="flex:1; min-width: 180px;">
+                <div style="font-size: 2.5rem; color:#bb9f82;">🕊️</div>
+                <h4 style="color:#8d735b; margin:0.5rem 0;">До 8 человек</h4>
+                <p style="color: #405a45;">Мини-группы, чтобы не нарушать тишину.</p>
+            </div>
+        </div>
+
+        <!-- подвал в белом цвете с песочными ссылками -->
+        <div class="footer">
+            <div>
+                <span class="logo" style="background: #FAF0E6; display: inline-block;">⛅ экото</span>
+                <p style="margin: 1rem 0 0; max-width: 260px;">Лицензия туроператора ТЭП-014824. Забота о природе в каждом шаге.</p>
+            </div>
+            <div>
+                <p style="font-weight: 500;">КОНТАКТЫ</p>
+                <p>hello@ecotone.ru<br>+7 (800) 555-38-62</p>
+                <p style="color:#a28364;">г. Сочи, ул. Лесная 11</p>
+            </div>
+            <div>
+                <p style="font-weight: 500;">АКЦЕНТЫ</p>
+                <p style="color: #9b846d;">#Forest<br>#Mountains<br>#Sand</p>
+            </div>
+            <small>© Экото — природный тур. Дизайн выполнен в цветах: мята, белый, песок.</small>
+        </div>
+    </div>
+</body>
+</html>
