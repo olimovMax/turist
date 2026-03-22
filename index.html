@@ -2,12 +2,13 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Эко тропа | природный тур</title>
-    <!-- лёгкий шрифт, без лишних засечек, воздух -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Худжанд | гид по городу</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=ваш-ключ-если-надо-но-работает-и-без&lang=ru_RU" type="text/javascript"></script>
     <style>
         * {
             margin: 0;
@@ -16,400 +17,875 @@
         }
 
         body {
-            background-color: #F0FFF0;          /* ОЧЕНЬ СВЕТЛЫЙ МЯТНЫЙ (Honeydew) — фон всего сайта */
-            font-family: 'Inter', sans-serif;
-            color: #1e2b24;                      /* глубокий тёмно-зелёный для читаемости, но не чёрный */
+            font-family: "Inter", sans-serif;
+            background: #f8f8f8;
+            color: #252525;
             line-height: 1.5;
+            overflow-x: hidden;
         }
 
-        /* основной белый цвет — контейнеры, карточки, большие блоки */
-        .white-panel {
-            background-color: #FFFFFF;            /* ОСНОВНОЙ БЕЛЫЙ */
-            border-radius: 32px;
-            box-shadow: 0 10px 30px -10px rgba(120, 100, 70, 0.08); /* тень песочного оттенка */
-            padding: 2rem 2.5rem;
-        }
-
-        .wrapper {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 2rem 2rem;
-        }
-
-        /* типографика */
-        h1, h2, h3 {
-            font-weight: 400;                     /* лёгкий вес, естественно */
-            letter-spacing: -0.02em;
+        :root {
+            --graphite: #252525;
+            --blue: #7FC7FF;
+            --blue-light: #a3d8ff;
+            --white-soft: #ffffff;
         }
 
         h1 {
-            font-size: 3.2rem;
-            line-height: 1.1;
+            font-size: clamp(2.2rem, 7vw, 3.5rem);
+            color: var(--graphite);
+            font-weight: 700;
+            letter-spacing: -0.02em;
         }
-
         h2 {
-            font-size: 2.4rem;
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            color: var(--graphite);
             margin-bottom: 1.5rem;
-            border-left: 6px solid #FAF0E6;        /* Льняной акцентная линия */
-            padding-left: 1.2rem;
-        }
-
-        h3 {
-            font-size: 1.6rem;
-            margin-bottom: 0.5rem;
-            color: #3a4a3f;                         /* чуть насыщеннее для иерархии */
-        }
-
-        /* АКЦЕНТ (песочный/бежевый) для заголовков в карточках, кнопок, иконок */
-        .accent-sand {
-            color: #b89b7b;                         /* тёплый песок — базовый тон */
-        }
-
-        .card h3 {
-            color: #9c7e5f;                          /* более выраженный песочный для карточек (заголовки) */
-            font-weight: 450;
-        }
-
-        /* кнопки в песочных тонах */
-        .btn-sand {
-            background-color: #FFFAF0;                /* Floral White — тёплый, под дерево/пляж */
-            border: 1px solid #e5d5c0;
-            color: #5f4e3c;
-            padding: 0.7rem 1.8rem;
-            border-radius: 40px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            position: relative;
             display: inline-block;
-            text-decoration: none;
+        }
+        h2:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 70px;
+            height: 4px;
+            background: var(--blue);
+            border-radius: 4px;
         }
 
-        .btn-sand:hover {
-            background-color: #f5e8d8;                /* чуть глубже бежевый */
-            border-color: #ccb99e;
-            color: #2f2a24;
-        }
-
-        /* хедер навигации */
+        /* навигация */
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 3rem;
-            flex-wrap: wrap;
-            gap: 1.5rem;
+            padding: 0.6rem 1.5rem;
+            background: var(--graphite);
+            border-radius: 50px;
+            box-shadow: 0 6px 20px rgba(37,37,37,0.2);
+            margin: 1.5rem 2rem 0 2rem;
+            position: relative;
+            z-index: 1000;
+            border: 2px solid var(--blue);
         }
 
         .logo {
-            font-size: 1.8rem;
-            font-weight: 350;
-            background: #FFFFFF;                       /* белая плашка */
-            padding: 0.3rem 1.2rem;
-            border-radius: 60px;
-            box-shadow: 0 4px 10px rgba(210, 180, 140, 0.1);
-            letter-spacing: -0.02em;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--blue);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+        .logo span {
+            color: var(--graphite);
+            background: var(--blue);
+            padding: 0.15rem 0.6rem;
+            border-radius: 30px;
+            font-size: 1rem;
+            margin-left: 2px;
+            font-weight: 600;
         }
 
-        .logo span {
-            color: #a28364;                            /* песчинка */
-            font-weight: 450;
+        .menu-toggle {
+            display: none;
+            background: var(--blue);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.4rem;
+            cursor: pointer;
+            color: var(--graphite);
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
         }
 
         .nav-links {
             display: flex;
-            gap: 2.5rem;
-            background: #FFFFFF;                        /* белый блок меню */
-            padding: 0.6rem 2rem;
-            border-radius: 40px;
-            box-shadow: 0 4px 12px rgba(160, 130, 90, 0.05);
+            gap: 1.8rem;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .nav-item {
+            position: static;
         }
 
         .nav-links a {
             text-decoration: none;
-            color: #2f4236;
+            color: white;
+            font-weight: 500;
             border-bottom: 2px solid transparent;
-            transition: border-color 0.15s;
             padding-bottom: 4px;
+            transition: 0.2s;
+            font-size: 1rem;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .nav-links a:hover {
+            border-bottom-color: var(--blue);
+            color: var(--blue);
+        }
+        .nav-links .city-btn {
+            background: var(--blue);
+            color: var(--graphite);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            border: 2px solid white;
+            font-size: 0.95rem;
+            white-space: nowrap;
+        }
+        .nav-links .city-btn:hover {
+            background: white;
+            color: var(--graphite);
+            border-color: var(--blue);
         }
 
-        .nav-links a:hover {
-            border-bottom-color: #d9c2aa;               /* песочное подчеркивание */
+        /* ========== МОДАЛЬНЫЕ ОКНА ПОД ХЕДЕРОМ - ИСПРАВЛЕНА ВЕРСТКА ========== */
+        .header-modal-wrapper {
+            position: relative;
+            z-index: 900;
+            margin: 0 2rem;
+        }
+        
+        .header-modal {
+            background: var(--graphite);
+            border: 3px solid var(--blue);
+            border-radius: 40px;
+            padding: 1.8rem;
+            margin-top: 0.8rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            color: white;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-15px);
+            transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 100%;
+            width: 100%;
+        }
+        
+        .header-modal.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .modal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .modal-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 28px;
+            overflow: hidden;
+            border: 1px solid var(--blue);
+            transition: 0.3s;
+        }
+        
+        .modal-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(127,199,255,0.2);
+        }
+        
+        .card-image {
+            height: 150px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .card-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(to top, var(--graphite), transparent);
+        }
+        
+        .card-content {
+            padding: 1.2rem;
+        }
+        
+        .card-title {
+            color: var(--blue);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .card-description {
+            color: #e0e0e0;
+            font-size: 0.85rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .card-items {
+            list-style: none;
+        }
+        
+        .card-items li {
+            margin-bottom: 0.3rem;
+            padding: 0.15rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: #d0d0d0;
+            border-bottom: 1px dashed rgba(127,199,255,0.2);
+        }
+        
+        .card-items li i {
+            color: var(--blue);
+            width: 20px;
+            font-size: 0.8rem;
         }
 
         /* hero секция */
-        .hero {
+        .city-hero {
             display: flex;
             flex-wrap: wrap;
             gap: 2rem;
-            margin-bottom: 4rem;
+            margin: 2rem 2rem 3rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
         }
-
         .hero-text {
-            flex: 1 1 300px;
-            align-self: center;
+            flex: 1 1 350px;
         }
-
         .hero-text p {
-            font-size: 1.3rem;
-            margin: 1.5rem 0 2rem;
-            color: #3b4e41;
+            font-size: 1.2rem;
+            color: #4a4a4a;
+            margin: 1.5rem 0;
         }
-
+        .hero-stats {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        .hero-stats div span:first-child {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--blue);
+        }
         .hero-image {
-            flex: 1 1 300px;
-            background-color: #e6d8c8;                  /* подложка под воображаемое фото — песочный намёк */
-            border-radius: 48px;
-            min-height: 280px;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" width="200" height="120" opacity="0.3"><path d="M0,60 Q30,25 65,40 Q90,50 115,35 Q140,20 170,40 Q190,55 200,45 L200,120 L0,120 Z" fill="%23c7b099" /><circle cx="50" cy="45" r="8" fill="%23aecfad" opacity="0.5"/><circle cx="130" cy="60" r="15" fill="%23d9c6aa" opacity="0.5"/></svg>');
-            background-repeat: no-repeat;
-            background-position: bottom right;
+            flex: 1 1 400px;
+            min-height: 340px;
+            border-radius: 70px 70px 70px 20px;
+            box-shadow: 20px 20px 30px rgba(37,37,37,0.2);
+            background-image: url('https://images.unsplash.com/photo-1621609764180-2ca554a9d6f2?q=80&w=2070&auto=format&fit=crop');
             background-size: cover;
-            background-color: #f2eee7;                   /* очень светлый песчаный */
-            box-shadow: inset 0 0 0 1px rgba(250, 240, 230, 0.6);
+            background-position: center;
+            border: 5px solid var(--blue);
         }
 
-        /* сетка карточек туров */
-        .tour-grid {
+        /* кнопки */
+        .btn-primary {
+            background: var(--graphite);
+            color: white;
+            padding: 0.9rem 2.2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            border: 2px solid var(--blue);
+        }
+        .btn-primary:hover {
+            background: var(--blue);
+            color: var(--graphite);
+        }
+        .btn-outline {
+            border: 2px solid var(--graphite);
+            color: var(--graphite);
+            padding: 0.9rem 2.2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-outline:hover {
+            background: var(--graphite);
+            color: white;
+            border-color: var(--blue);
+        }
+
+        /* карточки новостей */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.8rem;
+            margin: 2rem 0 3rem;
+        }
+        .news-card {
+            background: white;
+            border-radius: 36px;
+            overflow: hidden;
+            box-shadow: 0 12px 28px -12px rgba(37,37,37,0.15);
+            border: 2px solid var(--blue);
+            transition: transform 0.2s;
+        }
+        .news-card:hover {
+            transform: translateY(-6px);
+        }
+        .news-card-img {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+        }
+        .news-card-content {
+            padding: 1.8rem;
+        }
+        .news-tag {
+            background: var(--blue);
+            color: var(--graphite);
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+
+        /* карта */
+        .map-section {
+            margin: 3rem 2rem;
+            background: white;
+            border-radius: 50px;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 25px 40px -20px rgba(37,37,37,0.2);
+            border: 2px solid var(--blue);
+            position: relative;
+        }
+        
+        #yandex-map {
+            width: 100%;
+            height: 500px;
+            border-radius: 40px;
+            border: 5px solid var(--blue);
+            z-index: 10;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .nearby-places {
+            margin-top: 2.5rem;
+            background: var(--graphite);
+            border-radius: 40px;
+            padding: 1.8rem;
+            border: 2px solid var(--blue);
+            color: white;
+        }
+        
+        .poi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1rem;
+        }
+        .poi-item {
+            background: white;
+            border-radius: 30px;
+            padding: 1rem 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border: 2px solid var(--blue);
+            cursor: pointer;
+            transition: 0.2s;
+            color: var(--graphite);
+        }
+        .poi-item:hover {
+            background: var(--blue);
+            color: var(--graphite);
+        }
+
+        /* карточки музеев и мест */
+        .places-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
-            margin: 3rem 0 4rem;
+            margin: 3rem 2rem;
+        }
+        .place-card {
+            background: white;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 15px 25px -12px rgba(37,37,37,0.15);
+            border: 2px solid var(--blue);
+        }
+        .place-card-img {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+        .place-card-content {
+            padding: 1.8rem;
         }
 
-        .card {
-            background-color: #FFFFFF;                     /* основной белый для карточек */
-            border-radius: 28px;
-            padding: 1.8rem 1.5rem 2rem;
-            box-shadow: 0 15px 30px -12px rgba(150, 130, 100, 0.12);
-            transition: transform 0.2s;
-            border: 1px solid rgba(240, 240, 235, 0.6);
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card-icon {
-            font-size: 2.6rem;
-            margin-bottom: 1.2rem;
-            background: #FFFAF0;                           /* FLORAL WHITE — песочный фон для иконок */
-            width: 70px;
-            height: 70px;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #f0e0ce;
-        }
-
-        .card p {
-            color: #3b4e3f;
-            margin: 0.8rem 0 1.5rem;
-        }
-
-        .price-sand {
-            color: #917b62;
-            font-weight: 500;
-            font-size: 1.3rem;
-        }
-
-        /* feature блок с фоном tea green (ближе к мяте) */
-        .feature-block {
-            background-color: #D0F0C0;                     /* Tea Green — чуть насыщеннее мятный */
-            border-radius: 48px;
-            padding: 3rem 3rem;
-            margin: 4rem 0;
-            color: #23432c;
-        }
-
-        .feature-flex {
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .feature-flex > div {
-            flex: 1 1 260px;
-        }
-
-        .feature-flex h3 {
-            font-size: 2rem;
-            border-left: 5px solid #faf0e6;                 /* Linen */
-            padding-left: 1.5rem;
-        }
-
-        /* подвал */
+        /* футер */
         .footer {
+            background: var(--graphite);
+            color: white;
+            border-radius: 50px 50px 0 0;
+            padding: 3rem 2rem 1.5rem;
             margin-top: 4rem;
-            background: #FFFFFF;                              /* белый низ */
-            border-radius: 36px 36px 0 0;
-            padding: 2.5rem 2.5rem 1.8rem;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 2rem;
-            color: #48634e;
-            border-top: 2px solid #f0ebe4;
+            border-top: 5px solid var(--blue);
+        }
+        .footer a {
+            color: var(--blue);
+            text-decoration: none;
         }
 
-        .footer small {
-            color: #7b8f7e;
-            width: 100%;
-            text-align: center;
-            margin-top: 2rem;
-        }
-
-        /* Микро-элементы в песочных тонах */
-        .chip {
-            background: #FAF0E6;            /* Linen */
-            padding: 0.3rem 1rem;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            color: #5e503f;
-            display: inline-block;
-        }
-
-        hr {
-            border: none;
-            height: 2px;
-            background: linear-gradient(90deg, #f0e4d2, #ffffff, #f0e4d2);
-            margin: 2rem 0;
-        }
-
-        /* адаптация */
-        @media (max-width: 700px) {
-            h1 { font-size: 2.6rem; }
-            .wrapper { padding: 1rem; }
-            .white-panel { padding: 1.5rem; }
-            .navbar { flex-direction: column; align-items: stretch; }
-            .nav-links { justify-content: center; }
-        }
-
-        /* доп. акцент для заголовков внутри белых карточек */
-        .accent-header {
-            color: #b99f82;                                   /* песочный (Floral White производный) */
+        /* адаптив */
+        @media (max-width: 900px) {
+            .navbar {
+                flex-wrap: wrap;
+                padding: 0.6rem 1.2rem;
+                margin: 1rem 1rem 0 1rem;
+            }
+            
+            .menu-toggle {
+                display: flex;
+            }
+            
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background: var(--graphite);
+                padding: 1.5rem;
+                border-radius: 30px;
+                margin-top: 1rem;
+                border: 2px solid var(--blue);
+                margin-left: 0;
+            }
+            
+            .nav-links.show {
+                display: flex;
+            }
+            
+            .nav-item {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .header-modal-wrapper {
+                margin: 0 1rem;
+            }
+            
+            .header-modal {
+                padding: 1.2rem;
+                position: relative;
+                margin-top: 0;
+            }
+            
+            .modal-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="wrapper">
-        <!-- навигация: белое меню на мятном фоне -->
-        <div class="navbar">
-            <div class="logo">⊹ <span>эко</span>то</div>
-            <div class="nav-links">
-                <a href="#">походы</a>
-                <a href="#">леса</a>
-                <a href="#">горы</a>
-                <a href="#">эко</a>
+    <!-- Хедер -->
+    <div class="navbar">
+        <div class="logo">ХУДЖАНД<span>guide</span></div>
+        <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+        <div class="nav-links" id="navLinks">
+            <div class="nav-item" data-modal="sights">
+                <a>достопримечательности</a>
             </div>
-            <div class="chip">🌿 дыши свободно</div>
-        </div>
-
-        <!-- Hero секция (белый текст на мятном, сама герой плашка белая) -->
-        <div class="hero white-panel">          <!-- белый блок с тенью -->
-            <div class="hero-text">
-                <h1>Туда, где пахнет <span class="accent-sand">сосной</span> и тишиной</h1>
-                <p>Авторские туры в заповедные уголки. Пешие, лесные, высокогорные — только ты и природа.</p>
-                <a href="#" class="btn-sand">↠ выбрать направление</a>
+            <div class="nav-item" data-modal="events">
+                <a>события</a>
             </div>
-            <div class="hero-image">
-                <!-- чисто декоративный svg узор (имитация гор/леса) уже в фоне -->
+            <div class="nav-item" data-modal="plan">
+                <a>спланировать поездку</a>
             </div>
-        </div>
-
-        <!-- карточки туров — основной белый, песочные заголовки, мятный общий фон -->
-        <h2>🌱  ближайшие лесные</h2>
-        <div class="tour-grid">
-            <!-- карточка 1 -->
-            <div class="card">
-                <div class="card-icon">🏔️</div>
-                <h3>Тропа туманов</h3>
-                <p>Горный лагерь, хвойный лес, рассветы над облаками. Ночевка в домиках.</p>
-                <div class="price-sand">44 900 ₽</div>
-                <a href="#" class="btn-sand" style="margin-top: 1.2rem;">подробнее</a>
+            <div class="nav-item">
+                <a href="#карта" class="city-btn">карта города</a>
             </div>
-            <!-- карточка 2 -->
-            <div class="card">
-                <div class="card-icon">🌲</div>
-                <h3>В сердце бора</h3>
-                <p>Эко-маршрут без следа, знакомство с лесом, ягоды, травы. Идеально для новичков.</p>
-                <div class="price-sand">29 500 ₽</div>
-                <a href="#" class="btn-sand" style="margin-top: 1.2rem;">подробнее</a>
-            </div>
-            <!-- карточка 3 -->
-            <div class="card">
-                <div class="card-icon">🏕️</div>
-                <h3>Песчаный плёс</h3>
-                <p>Сплав + пешие переходы по дюнам. Ночлег у воды в палатках. Песок и сосны.</p>
-                <div class="price-sand">52 800 ₽</div>
-                <a href="#" class="btn-sand" style="margin-top: 1.2rem;">подробнее</a>
-            </div>
-            <!-- карточка 4 -->
-            <div class="card">
-                <div class="card-icon">🍃</div>
-                <h3>Заповедный край</h3>
-                <p>Треккинг к горным озёрам, питание от локальных фермеров, баня.</p>
-                <div class="price-sand">67 200 ₽</div>
-                <a href="#" class="btn-sand" style="margin-top: 1.2rem;">подробнее</a>
-            </div>
-        </div>
-
-        <!-- акцентный блок (Tea Green фон) + белый текст + песочные детали -->
-        <div class="feature-block">
-            <div class="feature-flex">
-                <div>
-                    <h3 style="border-left-color: #FFFAF0; color: #2b4f33;">Экологичные путешествия</h3>
-                    <p style="color: #2b442e;">Мы убираем маршруты, используем биоразлагаемые материалы и поддерживаем местные заповедники.</p>
-                    <div style="margin-top: 2rem;">
-                        <span class="chip" style="background:#FFFAF0; color:#4f543b;">🌎 углеводный след 0</span>
-                        <span class="chip" style="background:#FFFAF0; margin-left:0.5rem;">♻️ забота о лесе</span>
-                    </div>
-                </div>
-                <div style="background-color: #FFFFFF; border-radius: 40px; padding: 1.8rem; box-shadow: 0 6px 18px rgba(150,130,100,0.1);">
-                    <p style="font-size: 1.2rem;"><span style="color: #b2916f;">«</span> Мы влюблены в природу и передаём это бережно <span style="color: #b2916f;">»</span></p>
-                    <p style="margin-top: 0.8rem;">— основатели агентства, <span style="color:#8b765a;">Марина и Сергей</span></p>
-                </div>
-            </div>
-        </div>
-
-        <!-- дополнительный блок преимуществ (снова белые карточки) -->
-        <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; margin: 3rem 0;">
-            <div class="white-panel" style="flex:1; min-width: 180px;">
-                <div style="font-size: 2.5rem; color:#bb9f82;">🏞️</div>
-                <h4 style="color:#8d735b; margin:0.5rem 0;">100+ маршрутов</h4>
-                <p style="color: #405a45;">По горам, лесам и заповедным тропам.</p>
-            </div>
-            <div class="white-panel" style="flex:1; min-width: 180px;">
-                <div style="font-size: 2.5rem; color:#bb9f82;">⛰️</div>
-                <h4 style="color:#8d735b; margin:0.5rem 0;">Опытные гиды</h4>
-                <p style="color: #405a45;">Профессиональные проводники-экологи.</p>
-            </div>
-            <div class="white-panel" style="flex:1; min-width: 180px;">
-                <div style="font-size: 2.5rem; color:#bb9f82;">🕊️</div>
-                <h4 style="color:#8d735b; margin:0.5rem 0;">До 8 человек</h4>
-                <p style="color: #405a45;">Мини-группы, чтобы не нарушать тишину.</p>
-            </div>
-        </div>
-
-        <!-- подвал в белом цвете с песочными ссылками -->
-        <div class="footer">
-            <div>
-                <span class="logo" style="background: #FAF0E6; display: inline-block;">⛅ экото</span>
-                <p style="margin: 1rem 0 0; max-width: 260px;">Лицензия туроператора ТЭП-014824. Забота о природе в каждом шаге.</p>
-            </div>
-            <div>
-                <p style="font-weight: 500;">КОНТАКТЫ</p>
-                <p>hello@ecotone.ru<br>+7 (800) 555-38-62</p>
-                <p style="color:#a28364;">г. Сочи, ул. Лесная 11</p>
-            </div>
-            <div>
-                <p style="font-weight: 500;">АКЦЕНТЫ</p>
-                <p style="color: #9b846d;">#Forest<br>#Mountains<br>#Sand</p>
-            </div>
-            <small>© Экото — природный тур. Дизайн выполнен в цветах: мята, белый, песок.</small>
         </div>
     </div>
+
+    <!-- Контейнер для модальных окон (позиционирование относительно хедера) -->
+    <div class="header-modal-wrapper">
+        <!-- Достопримечательности -->
+        <div class="header-modal" id="modal-sights">
+            <div class="modal-grid">
+                <div class="modal-card">
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1596553811309-8f4b8b36bd63?q=80&w=1974&auto=format&fit=crop');"></div>
+                    <div class="card-content">
+                        <div class="card-title"><i class="fas fa-star"></i> Популярные</div>
+                        <div class="card-description">Главные места, которые нельзя пропустить</div>
+                        <ul class="card-items">
+                            <li><i class="fas fa-mosque"></i> Мечеть-мавзолей Шейха Муслихиддина</li>
+                            <li><i class="fas fa-fort"></i> Цитадель Худжанда</li>
+                            <li><i class="fas fa-archaeology"></i> Древнее городище</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-card">
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1544967082-d9d25d867d66?q=80&w=1974&auto=format&fit=crop');"></div>
+                    <div class="card-content">
+                        <div class="card-title"><i class="fas fa-palette"></i> Культурные места</div>
+                        <div class="card-description">Музеи, театры и творческие пространства</div>
+                        <ul class="card-items">
+                            <li><i class="fas fa-museum"></i> Историко-краеведческий музей</li>
+                            <li><i class="fas fa-feather"></i> Дом-музей Камола Худжанди</li>
+                            <li><i class="fas fa-music"></i> Театр имени Камола Худжанди</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-card">
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1605962730601-981ac5f7b6c6?q=80&w=1974&auto=format&fit=crop');"></div>
+                    <div class="card-content">
+                        <div class="card-title"><i class="fas fa-history"></i> Исторические места</div>
+                        <div class="card-description">Памятники древности и архитектуры</div>
+                        <ul class="card-items">
+                            <li><i class="fas fa-church"></i> Мечеть Масджиди-Джами</li>
+                            <li><i class="fas fa-water"></i> Набережная Сырдарьи</li>
+                            <li><i class="fas fa-archaeology"></i> Археологический парк</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- События -->
+        <div class="header-modal" id="modal-events">
+            <div class="modal-grid">
+                <div class="modal-card">
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1604719311686-9c897e119c12?q=80&w=1974&auto=format&fit=crop');"></div>
+                    <div class="card-content">
+                        <div class="card-title"><i class="fas fa-fire"></i> Что нового</div>
+                        <div class="card-description">Свежие события и открытия</div>
+                        <ul class="card-items">
+                            <li><i class="fas fa-store"></i> Открытие базара "Панджшанбе"</li>
+                            <li><i class="fas fa-tree"></i> Новый арт-парк у озера</li>
+                            <li><i class="fas fa-utensils"></i> Гастрофестиваль в выходные</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-card">
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=1974&auto=format&fit=crop');"></div>
+                    <div class="card-content">
+                        <div class="card-title"><i class="fas fa-music"></i> Ближайшие мероприятия</div>
+                        <div class="card-description">Концерты, выставки, фестивали</div>
+                        <ul class="card-items">
+                            <li><i class="fas fa-concert"></i> Концерт национальной музыки</li>
+                            <li><i class="fas fa-palette"></i> Выставка современных художников</li>
+                            <li><i class="fas fa-running"></i> Городской марафон</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-card">
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a0c3?q=80&w=1974&auto=format&fit=crop');"></div>
+                    <div class="card-content">
+                        <div class="card-title"><i class="fas fa-clock"></i> Постоянные события</div>
+                        <div class="card-description">Регулярные мероприятия</div>
+                        <ul class="card-items">
+                            <li><i class="fas fa-museum"></i> Экскурсии по музеям каждую субботу</li>
+                            <li><i class="fas fa-children"></i> Детские мастер-классы</li>
+                            <li><i class="fas fa-market"></i> Ярмарка ремесленников</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Спланировать поездку -->
+        <div class="header-modal" id="modal-plan">
+            <div class="modal-grid">
+                <div class="modal-card">
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1974&auto=format&fit=crop');"></div>
+                    <div class="card-content">
+                        <div class="card-title"><i class="fas fa-hotel"></i> Проживание</div>
+                        <div class="card-description">Где остановиться в Худжанде</div>
+                        <ul class="card-items">
+                            <li><i class="fas fa-bed"></i> Забронировать отель</li>
+                            <li><i class="fas fa-home"></i> Апартаменты и гостевые дома</li>
+                            <li><i class="fas fa-campground"></i> Хостелы</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-card">
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1621609762477-148a6e2b99d3?q=80&w=1974&auto=format&fit=crop');"></div>
+                    <div class="card-content">
+                        <div class="card-title"><i class="fas fa-umbrella-beach"></i> Туристические места</div>
+                        <div class="card-description">Что посмотреть и чем заняться</div>
+                        <ul class="card-items">
+                            <li><i class="fas fa-mountain"></i> Экскурсии по горам</li>
+                            <li><i class="fas fa-water"></i> Прогулки по набережной</li>
+                            <li><i class="fas fa-tree"></i> Парки и зоны отдыха</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-card">
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=1974&auto=format&fit=crop');"></div>
+                    <div class="card-content">
+                        <div class="card-title"><i class="fas fa-car"></i> Продвижение по городу</div>
+                        <div class="card-description">Как перемещаться</div>
+                        <ul class="card-items">
+                            <li><i class="fas fa-bus"></i> Общественный транспорт</li>
+                            <li><i class="fas fa-taxi"></i> Такси и трансферы</li>
+                            <li><i class="fas fa-bicycle"></i> Аренда велосипедов</li>
+                            <li><i class="fas fa-walking"></i> Пешие маршруты</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero -->
+    <div class="city-hero">
+        <div class="hero-text">
+            <h1>Добро пожаловать<br>в <span style="color:var(--blue);">Худжанд</span></h1>
+            <p>Древний город на Великом шёлковом пути. Современные пространства, музеи, парки и яркая атмосфера.</p>
+            <div style="display: flex; gap:1rem; flex-wrap: wrap;">
+                <a href="#" class="btn-primary">исследовать</a>
+                <a href="#" class="btn-outline">маршруты</a>
+            </div>
+            <div class="hero-stats">
+                <div><span>2500+</span> лет истории</div>
+                <div><span>12</span> музеев</div>
+                <div><span>30+</span> кафе и парков</div>
+            </div>
+        </div>
+        <div class="hero-image" aria-label="Панорама Худжанда"></div>
+    </div>
+
+    <!-- Что нового -->
+    <div style="margin: 2rem 2rem;" id="новости">
+        <h2>📰 что нового</h2>
+        <div class="news-grid">
+            <div class="news-card">
+                <div class="news-card-img" style="background-image: url('https://images.unsplash.com/photo-1604719311686-9c897e119c12?q=80&w=1974&auto=format&fit=crop');"></div>
+                <div class="news-card-content">
+                    <h3>Открытие базара "Панджшанбе"</h3>
+                    <p>Обновлённая территория, ремесленные лавки и фуд-корт.</p>
+                    <span class="news-tag">только что</span>
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-card-img" style="background-image: url('https://images.unsplash.com/photo-1621278471774-ecf3c7b6dc56?q=80&w=1974&auto=format&fit=crop');"></div>
+                <div class="news-card-content">
+                    <h3>Новый арт-парк "Комсомольское озеро"</h3>
+                    <p>Вело-дорожки, скульптуры, прокат лодок.</p>
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-card-img" style="background-image: url('https://images.unsplash.com/photo-1566125881255-7743f3c6a2c6?q=80&w=1974&auto=format&fit=crop');"></div>
+                <div class="news-card-content">
+                    <h3>Музей археологии</h3>
+                    <p>Новая экспозиция "Древний Худжанд".</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Яндекс Карта -->
+    <div class="map-section" id="карта">
+        <h2>🗺️ карта центра</h2>
+        <div id="yandex-map"></div>
+        <div class="nearby-places">
+            <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem;">
+                <i class="fas fa-location-dot"></i>
+                <span style="font-weight:600;">рядом с центром (нажмите для перехода)</span>
+            </div>
+            <div class="poi-grid">
+                <div class="poi-item" data-lat="40.2820" data-lon="69.6140" data-name="Краеведческий музей">
+                    <i class="fas fa-museum"></i> Краеведческий музей
+                </div>
+                <div class="poi-item" data-lat="40.2850" data-lon="69.6190" data-name="Музей фортификации">
+                    <i class="fas fa-fort"></i> Музей фортификации
+                </div>
+                <div class="poi-item" data-lat="40.2815" data-lon="69.6155" data-name="Ресторан Согдиана">
+                    <i class="fas fa-utensils"></i> Ресторан "Согдиана"
+                </div>
+                <div class="poi-item" data-lat="40.2790" data-lon="69.6200" data-name="Городской парк">
+                    <i class="fas fa-tree"></i> Городской парк
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Музеи -->
+    <div style="margin: 3rem 2rem;" id="музеи">
+        <h2>🏛️ музеи</h2>
+        <div class="places-grid">
+            <div class="place-card">
+                <div class="place-card-img" style="background-image: url('https://images.unsplash.com/photo-1544967082-d9d25d867d66?q=80&w=1974&auto=format&fit=crop');"></div>
+                <div class="place-card-content"><h3>Историко-краеведческий музей</h3><p>Артефакты эпохи кушанов.</p></div>
+            </div>
+            <div class="place-card">
+                <div class="place-card-img" style="background-image: url('https://images.unsplash.com/photo-1604324923994-4ac3d243d1e4?q=80&w=1974&auto=format&fit=crop');"></div>
+                <div class="place-card-content"><h3>Музей фортификации</h3><p>Цитадель Худжанда.</p></div>
+            </div>
+            <div class="place-card">
+                <div class="place-card-img" style="background-image: url('https://images.unsplash.com/photo-1577083552431-6e5fd0192885?q=80&w=1974&auto=format&fit=crop');"></div>
+                <div class="place-card-content"><h3>Дом-музей Камола Худжанди</h3><p>Поэт и мыслитель.</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Интересные места -->
+    <div style="margin: 3rem 2rem;" id="места">
+        <h2>✨ интересные места</h2>
+        <div class="places-grid">
+            <div class="place-card">
+                <div class="place-card-img" style="background-image: url('https://images.unsplash.com/photo-1596553811309-8f4b8b36bd63?q=80&w=1974&auto=format&fit=crop');"></div>
+                <div class="place-card-content"><h3>Мечеть Шейха Муслихиддина</h3><p>XII век, изразцы.</p></div>
+            </div>
+            <div class="place-card">
+                <div class="place-card-img" style="background-image: url('https://images.unsplash.com/photo-1621609762477-148a6e2b99d3?q=80&w=1974&auto=format&fit=crop');"></div>
+                <div class="place-card-content"><h3>Набережная Сырдарьи</h3><p>Прогулочная зона.</p></div>
+            </div>
+            <div class="place-card">
+                <div class="place-card-img" style="background-image: url('https://images.unsplash.com/photo-1605962730601-981ac5f7b6c6?q=80&w=1974&auto=format&fit=crop');"></div>
+                <div class="place-card-content"><h3>Древнее городище</h3><p>Раскопки под открытым небом.</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- футер -->
+    <div class="footer">
+        <div style="max-width:1200px; margin:0 auto; display:flex; flex-wrap:wrap; gap:3rem; justify-content:space-between;">
+            <div><div class="logo" style="color:var(--blue);">ХУДЖАНД<span style="background:var(--blue); color:var(--graphite);">guide</span></div><p style="color:white;">городской гид</p></div>
+            <div><h4 style="color:var(--blue);">контакты</h4><p style="color:white;">info@khujand.tj</p></div>
+            <div><h4 style="color:var(--blue);">разделы</h4><p><a href="#">новости</a> · <a href="#">музеи</a> · <a href="#">карта</a></p></div>
+        </div>
+        <div style="text-align:center; margin-top:2.5rem; opacity:0.8; color:var(--blue);">© 2026 — Худжанд</div>
+    </div>
+
+    <script>
+        // гамбургер
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.getElementById('navLinks').classList.toggle('show');
+        });
+
+        // Управление модальными окнами
+        const navItems = document.querySelectorAll('.nav-item[data-modal]');
+        const modals = {
+            sights: document.getElementById('modal-sights'),
+            events: document.getElementById('modal-events'),
+            plan: document.getElementById('modal-plan')
+        };
+        
+        let hideTimeout;
+
+        function showModal(modalId) {
+            Object.values(modals).forEach(modal => {
+                if (modal) modal.classList.remove('show');
+            });
+            if (modals[modalId]) {
+                modals[modalId].classList.add('show');
+            }
+        }
+
+        function hideAllModals() {
+            Object.values(modals).forEach(modal => {
+                if (modal) modal.classList.remove('show');
+            });
+        }
+
+        navItems.forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                clearTimeout(hideTimeout);
+                const modalId = this.dataset.modal;
+                showModal(modalId);
+            });
+
+            item.addEventListener('mouseleave', function() {
+                hideTimeout = setTimeout(() => {
+                    const anyModalHovered = Object.values(modals).some(modal => 
+                        modal && modal.matches(':hover')
+                    );
+                    const anyNavHovered = Array.from(navItems).some(nav => nav.matches(':hover'));
+                    
+                    if (!anyModalHovered && !anyNavHovered) {
+                        hideAllModals();
+                    }
+                }, 150);
+            });
+        });
+
+        Object.values(modals).forEach(modal => {
+            if (!modal) return;
+            modal.addEventListener('mouseenter', function() {
+                clearTimeout(hideTimeout);
+            });
+            modal.addEventListener('mouseleave', function() {
+                hideTimeout = setTimeout(() => {
+                    const anyNavHovered = Array.from(navItems).some(nav => nav.matches(':hover'));
+                    if (!anyNavHovered) {
+                        hideAllModals();
+                    }
+                }, 150);
+            });
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') hideAllModals();
+        });
+
+        // Яндекс Карта
+        ymaps.ready(init);
+        function init() {
+            var myMap = new ymaps.Map("yandex-map", {
+                center: [40.2833, 69.6167],
+                zoom: 15,
+                controls: ['zoomControl', 'searchControl', 'fullscreenControl', 'geolocationControl']
+            });
+
+            var places = [
+                { coords: [40.2820, 69.6140], name: 'Краеведческий музей' },
+                { coords: [40.2850, 69.6190], name: 'Музей фортификации' },
+                { coords: [40.2815, 69.6155], name: 'Ресторан "Согдиана"' },
+                { coords: [40.2790, 69.6200], name: 'Городской парк' }
+            ];
+
+            places.forEach(place => {
+                var placemark = new ymaps.Placemark(place.coords, {
+                    balloonContent: place.name,
+                    hintContent: place.name
+                }, { preset: 'islands#blueDotIcon', iconColor: '#7FC7FF' });
+                myMap.geoObjects.add(placemark);
+            });
+
+            document.querySelectorAll('.poi-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    var lat = parseFloat(this.dataset.lat);
+                    var lon = parseFloat(this.dataset.lon);
+                    if (!isNaN(lat) && !isNaN(lon)) {
+                        myMap.setCenter([lat, lon], 17);
+                        myMap.geoObjects.each(function(geoObject) {
+                            if (geoObject.geometry) {
+                                var coords = geoObject.geometry.getCoordinates();
+                                if (Math.abs(coords[0] - lat) < 0.001 && Math.abs(coords[1] - lon) < 0.001) {
+                                    geoObject.balloon.open();
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+        }
+    </script>
 </body>
 </html>
